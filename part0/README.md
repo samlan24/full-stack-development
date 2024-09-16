@@ -1,8 +1,86 @@
-# React + Vite
+## 0.4: New note diagram
+```mermaid
+sequenceDiagram
+    participant browser
+    participant server
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+    Note right of browser: User writes a note and clicks the Save button
 
-Currently, two official plugins are available:
+    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note
+    activate server
+    server-->>browser: Redirect to /notes
+    deactivate server
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
+    activate server
+    server-->>browser: HTML document
+    deactivate server
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.css
+    activate server
+    server-->>browser: the css file
+    deactivate server
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.js
+    activate server
+    server-->>browser: the JavaScript file
+    deactivate server
+
+    Note right of browser: The browser starts executing the JavaScript code that fetches the JSON from the server
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
+    activate server
+    server-->>browser: [{ "content": "HTML is easy", "date": "2024-09-11" }, ... ]
+    deactivate server
+
+    Note right of browser: The browser executes the callback function that renders the notes
+```
+
+## 0.5: Single page app diagram
+
+```mermaid
+sequenceDiagram
+    participant browser
+    participant server
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/spa
+    activate server
+    server-->>browser: HTML document
+    deactivate server
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.css
+    activate server
+    server-->>browser: the css file
+    deactivate server
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+    activate server
+    server-->>browser: the JavaScript file
+    deactivate server
+
+    Note right of browser: The browser starts executing the JavaScript code that fetches the JSON from the server
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
+    activate server
+    server-->>browser: [{ "content": "HTML is easy", "date": "2024-09-11" }, ... ]
+    deactivate server
+
+    Note right of browser: The browser executes the callback function that renders the notes
+```
+
+## 0.6: New note in Single page app diagram
+
+```mermaid
+sequenceDiagram
+    participant browser
+    participant server
+
+    Note right of browser: User writes a note and clicks the Save button
+
+    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+    activate server
+    server-->>browser: { "content": "New note", "date": "2024-09-11" }
+    deactivate server
+
+    Note right of browser: The browser updates the notes list dynamically without reloading the page
+```
