@@ -2,8 +2,12 @@ import { useState } from 'react'
 
 const Header = ({ course }) => <h1>{course}</h1>
 
-const Total = ({ sum }) => <p>Number of exercises {sum}</p>
-
+const Total = ({ course }) => {
+  const totalExercies = course.parts
+      .map(part => part.exercises)
+      .reduce((acc, curr) => acc + curr, 0)
+  return <p><strong>Number of exercises {totalExercies}</strong></p>
+}
 const Part = ({ part }) =>
   <p>
     {part.name} {part.exercises}
@@ -19,6 +23,7 @@ const Course = ({ course }) => {
     <>
     <Header course={course.name} />
     <Content parts={course.parts} />
+    <Total course={course}/>
 
     </>
   )
