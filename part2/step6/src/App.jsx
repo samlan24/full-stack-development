@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Course from './components/course'
 
 
+
 const App = () => {
   const course = {
     id: 1,

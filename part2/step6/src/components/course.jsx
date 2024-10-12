@@ -8,6 +8,8 @@ const Total = ({ course }) => {
       .reduce((acc, curr) => acc + curr, 0)
   return <p><strong>Number of exercises {totalExercies}</strong></p>
 }
+
+
 const Part = ({ part }) =>
   <p>
     {part.name} {part.exercises}
