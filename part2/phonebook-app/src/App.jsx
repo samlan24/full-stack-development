@@ -4,18 +4,27 @@ const App = () => {
   const [persons, setPersons] = useState([{ name: 'Arto Hellas' }]);
   const [newName, setNewName] = useState('');
 
+  // checks if name exists
+  const nameExists = new Set(persons.map(person => person.name));
+
   const addPerson = (event) => {
     event.preventDefault();
+    // if the name exists, there's an alert
+    if (nameExists.has(newName)) {
+      alert(`${newName} is already added to phonebook`);
+      return;
+    }
+
     const personObject = {
       name: newName,
     };
 
     setPersons(persons.concat(personObject));
-    setNewName(''); // Clear the input field after adding
+    setNewName('');
   };
 
   const handlePersonChange = (event) => {
-    setNewName(event.target.value); // Ensure this is always a string
+    setNewName(event.target.value);
   };
 
   return (
