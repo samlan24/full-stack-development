@@ -13,10 +13,10 @@ const App = () => {
 
   useEffect(() => {
     phoneService
-    .getAll()
-    .then(initialBook => {
-      setPersons(initialBook);
-    });
+      .getAll()
+      .then(initialBook => {
+        setPersons(initialBook);
+      });
   }, []);
 
 
@@ -27,32 +27,49 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault();
-    // if the name exists, there's an alert
-    if (nameExists.has(newName)) {
-      alert(`${newName} is already added to phonebook`);
-      return;
+
+    const existingPerson = persons.find(person => person.name === newName);
+
+    if (existingPerson) {
+      const result = window.confirm(`${newName} is already added to phonebook. Replace the old number with a new one?`);
+      if (result) {
+        const updatedPerson = { ...existingPerson, number: newNumber };
+        phoneService
+          .updateNumber(existingPerson.id, updatedPerson)
+          .then(returnedPerson => {
+            setPersons(persons.map(person =>
+              person.id !== existingPerson.id ? person : returnedPerson
+            ));
+            setNewName('');
+            setNewNumber('');
+          })
+          .catch(error => {
+            console.error("Error updating number:", error);
+            alert("An error occurred while updating the number.");
+          });
+      }
+    } else {
+      const personObject = {
+        name: newName,
+        number: newNumber,
+      };
+
+      phoneService
+        .create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson));
+          setNewName('');
+          setNewNumber('');
+        });
     }
-
-    const personObject = {
-      name: newName,
-      number: newNumber,
-    };
-
-    phoneService
-      .create(personObject)
-      .then(returnedPerson => {
-        setPersons(persons.concat(returnedPerson));
-        setNewName('');
-        setNewNumber('');
-      });
-  }
+  };
 
   const deletePerson = (id) => {
     const person = persons.find(person => person.id === id);
     const result = window.confirm(`Delete ${person.name} ?`);
     if (result) {
       phoneService
-        .deleteNUmber(id)
+        .deleteNumber(id)
         .then(() => {
           setPersons(persons.filter(person => person.id !== id));
         });
@@ -81,9 +98,9 @@ const App = () => {
       <h2>Phonebook</h2>
       <Filter filterName={filterName} handleFilterName={handleFilterName} />
       <h2>Add New User</h2>
-      <Person addPerson={addPerson} newName={newName} newNumber={newNumber} handleNumberChange={handleNumberChange} handlePersonChange={handlePersonChange}/>
+      <Person addPerson={addPerson} newName={newName} newNumber={newNumber} handleNumberChange={handleNumberChange} handlePersonChange={handlePersonChange} />
       <h2>Numbers</h2>
-      <Show personsToShow={personsToShow} deletePerson={deletePerson}/>
+      <Show personsToShow={personsToShow} deletePerson={deletePerson} />
     </div>
   );
 };
