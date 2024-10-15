@@ -1,14 +1,26 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Filter from './components/Filter';
 import Person from './components/Person';
 import Show from './components/Show';
-import axios from 'axios';
+import phoneService from './services/Phones';
 
 const App = () => {
   const [persons, setPersons] = useState([{ name: 'Arto Hellas', number: '040-1234567' }]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [filterName, setFilterName] = useState('');
+
+
+  useEffect(() => {
+    phoneService
+    .getAll()
+    .then(initialBook => {
+      setPersons(initialBook);
+    });
+  }, []);
+
+
+
 
   // checks if name exists
   const nameExists = new Set(persons.map(person => person.name));
@@ -26,13 +38,13 @@ const App = () => {
       number: newNumber,
     };
 
-    axios
-      .post('http://localhost:3001/persons', personObject)
-      .then(response => {
-        setPersons(persons.concat(response.data));
+    phoneService
+      .create(personObject)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson));
         setNewName('');
         setNewNumber('');
-      })
+      });
   }
 
   const handlePersonChange = (event) => {
