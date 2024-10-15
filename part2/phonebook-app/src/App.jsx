@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Filter from './components/Filter';
 import Person from './components/Person';
 import Show from './components/Show';
+import axios from 'axios';
 
 const App = () => {
   const [persons, setPersons] = useState([{ name: 'Arto Hellas', number: '040-1234567' }]);
@@ -25,10 +26,14 @@ const App = () => {
       number: newNumber,
     };
 
-    setPersons(persons.concat(personObject));
-    setNewName('');
-    setNewNumber('');
-  };
+    axios
+      .post('http://localhost:3001/persons', personObject)
+      .then(response => {
+        setPersons(persons.concat(response.data));
+        setNewName('');
+        setNewNumber('');
+      })
+  }
 
   const handlePersonChange = (event) => {
     setNewName(event.target.value);
