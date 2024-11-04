@@ -19,12 +19,7 @@ const App = () => {
       });
   }, []);
 
-
-
-
-  // checks if name exists
-  const nameExists = new Set(persons.map(person => person.name));
-
+  // Adding a new person to the phonebook
   const addPerson = (event) => {
     event.preventDefault();
 
@@ -64,6 +59,7 @@ const App = () => {
     }
   };
 
+  // Deleting a person from the phonebook
   const deletePerson = (id) => {
     const person = persons.find(person => person.id === id);
     const result = window.confirm(`Delete ${person.name} ?`);
