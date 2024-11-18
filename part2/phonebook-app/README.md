@@ -9,4 +9,5 @@ Currently, two official plugins are available:
 
 
 | frontend | backend | db |
-|---|---|---|
+|:---|:---|---:|
+| React | Node.js | mongodb
